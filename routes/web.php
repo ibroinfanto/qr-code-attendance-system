@@ -20,13 +20,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function() {
+Route::get('/', function () {
     return redirect(route('dashboard'));
 });
 
 
 Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function () {
-
 
 
     Route::get('/', [DashboardController::class, 'dashboard'])
@@ -112,7 +111,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function ()
     });
 
     //ATTENDANCE MANAGEMENT ROUTES
-    Route::prefix('/attendance')->group(function() {
+    Route::prefix('/attendance')->group(function () {
 
         Route::get('/{lectureId?}', [LectureAttendanceController::class, 'index'])
             ->name('attendance.all');
@@ -126,9 +125,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function ()
             ->can('isInvigilator', User::class);
 
         Route::get('/report/{id}', [LectureAttendanceController::class, 'report'])
-            ->name('attendance.report')
-            ->can('isInvigilator', User::class);
-
+            ->name('attendance.report');
     });
 
     //STUDENT MANAGEMENT ROUTES
@@ -158,4 +155,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function ()
 Route::get('qr/mark', [LectureAttendanceController::class, 'mark'])
     ->name("class.attendance.mark");
 
-require __DIR__.'/auth.php';
+Route::post('qr/mark/{attendance}/{lecture}', [LectureAttendanceController::class, 'enterMatric'])
+    ->name("students.enter.matric");
+
+require __DIR__ . '/auth.php';

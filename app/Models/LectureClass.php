@@ -30,7 +30,7 @@ class LectureClass extends Model
 
     public function attendance(): HasOne
     {
-        return $this->hasOne(LectureAttendance::class);
+        return $this->hasOne(LectureAttendance::class, 'attendance_id');
     }
 
 }

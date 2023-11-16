@@ -12,41 +12,41 @@
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-vcenter">
                     <thead>
-                        <tr>
-                            <th style="width: 10%;">#</th>
-                            <th style="width: 35%;"">Student Name</th>
-                            <th style="width: 30%;">Matric No.</th>
-                            <th style="width: 25%;">Attended</th>
-                        </tr>
+                    <tr>
+                        <th style="width: 10%;">#</th>
+                        <th style="width: 35%;">Student Name</th>
+                        <th style="width: 30%;">Matric No.</th>
+                        <th style="width: 25%;">Attended</th>
+                    </tr>
                     </thead>
                     <tbody>
 
-                        @if ($students->count() > 0)
+                    @if ($students->count() > 0)
 
-                            @foreach ($students as $student)
-                                <tr>
-                                    <td class="fw-semibold fs-sm">
-                                        <a href="">{{ ++$loop->index }}</a>
-                                    </td>
-                                    <td class="fw-semibold fs-sm">
-                                        {{ $student->name }}
-                                    </td>
-                                    <td class="fs-sm">{{ $student->matric }}</em></td>
-                                    <td>
-                                        True
-                                    </td>
-
-                                </tr>
-                            @endforeach
-                        @else
+                        @foreach ($students as $student)
                             <tr>
-
-                                <td class="fw-semibold text-center" colspan="5">
-                                    <h5>NO DATA FOUND</h5>
+                                <td class="fw-semibold fs-sm">
+                                    <a href="">{{ ++$loop->index }}</a>
+                                </td>
+                                <td class="fw-semibold fs-sm">
+                                    {{ $student->name }}
+                                </td>
+                                <td class="fs-sm">{{ $student->matric }}</em></td>
+                                <td>
+                                    {{ $attendedStudents->contains($student->id) ? "TRUE" : "FALSE" }}
                                 </td>
 
                             </tr>
-                        @endif
+                        @endforeach
+                    @else
+                        <tr>
+
+                            <td class="fw-semibold text-center" colspan="5">
+                                <h5>NO DATA FOUND</h5>
+                            </td>
+
+                        </tr>
+                    @endif
 
                     </tbody>
                 </table>
