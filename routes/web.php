@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect(route('dashboard'));
+    return view('frontend.home');
 });
 
 
@@ -126,6 +126,12 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function ()
 
         Route::get('/report/{id}', [LectureAttendanceController::class, 'report'])
             ->name('attendance.report');
+
+        Route::get('/report/semester/all', [LectureAttendanceController::class, 'semesterReport'])
+            ->name('attendance.semester.all');
+
+        Route::get('/report/semester/{course}', [LectureAttendanceController::class, 'semesterReportCourse'])
+            ->name('attendance.semester.course');
     });
 
     //STUDENT MANAGEMENT ROUTES
