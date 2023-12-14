@@ -86,19 +86,19 @@ class LectureAttendanceController extends Controller
 
             $student = Student::where('matric', $request->matric)->first();
 
-            $attendanceRecord = $student->lectureAttendances()
-                ->where(['origin' => $request->getClientIp(), 'lecture_attendance_id' => $request->attendance])
-                ->first();
+            if ($student) {
+                $attendanceRecord = $student->lectureAttendances()
+                    ->where(['origin' => $request->getClientIp(), 'lecture_attendance_id' => $request->attendance])
+                    ->first();
 
-            if ($attendanceRecord) {
-                $message = "Attendance already marked from this device. Note you can't mark attendance for different matric numbers from the same device";
-            }
-            elseif ($student && $student->courses->contains($lectureClass->course) && !$lectureAttendance->students->contains($student)) {
-                $lectureAttendance->students()->attach($student, ['origin' => $request->getClientIp()]);
-                $message = "Attendance marked successfully";
-            }
-            else {
-                $message = "You are either not offering this course or you have marked attendance already";
+                if ($attendanceRecord) {
+                    $message = "Attendance already marked from this device. Note you can't mark attendance for different matric numbers from the same device";
+                } elseif ($student->courses->contains($lectureClass->course) && !$lectureAttendance->students->contains($student)) {
+                    $lectureAttendance->students()->attach($student, ['origin' => $request->getClientIp(), 'taken_at' => now()]);
+                    $message = "Attendance marked successfully";
+                } else {
+                    $message = "You are either not offering this course or you have marked attendance already";
+                }
             }
 
             return view("frontend.students.attendance-marked", compact('message'));
@@ -127,7 +127,8 @@ class LectureAttendanceController extends Controller
         return view('backend.attendance.semester-report', compact('lectureInfo'));
     }
 
-    public function semesterReportCourse(Request $request) {
+    public function semesterReportCourse(Request $request)
+    {
         $info = [];
 
         $course = Course::find($request->course);
@@ -151,7 +152,7 @@ class LectureAttendanceController extends Controller
 
         foreach ($lectureClasses as $lectureClass) {
             $attendance = LectureAttendance::find($lectureClass->attendance_id);
-            if($attendance->students->contains($student)) {
+            if ($attendance->students->contains($student)) {
                 $score = $score + 1;
             }
         }
